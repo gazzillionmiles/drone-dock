@@ -173,3 +173,46 @@ Not implemented, per the brief, but here's what I'd change and why:
   files from the Express app, or from a CDN/static host pointed at the
   same origin as the API — not wired up here to keep `npm run dev`
   simple for review.
+
+---
+
+## LiveKit Video Streaming
+
+Each drone card displays an FPV video feed using the **LiveKit WebRTC SDK**, operating in tandem with the real-time telemetry updates.
+
+### How Video Works
+1. When a drone card is displayed on the React dashboard, the client initiates a request to the backend: `GET /api/livekit/token?droneId=<id>`.
+2. The backend generates a secure, scoped LiveKit JWT Token (`AccessToken`) granting room join, publish, and subscription permissions for that specific room (`drone-<id>`).
+3. The client connects over WebRTC using `<LiveKitRoom>` to establishing a secure WebRTC media channel.
+4. If no remote hardware publisher exists, the dashboard's media client falls back to rendering a tactical Canvas HUD that responds dynamically to changes in drone telemetry props (altitude, speed, battery) in real time.
+
+### Local LiveKit Setup & Starting Server
+To run a local LiveKit instance for WebRTC signaling and media bridging:
+
+```bash
+# Start LiveKit in dev mode (uses ws://localhost:7880, devkey, secret)
+docker run --rm -p 7880:7880 -p 7881:7881 -p 7882:7882/udp \
+  livekit/livekit:latest \
+  --config /dev/null --dev
+```
+
+### Environment Variables
+Configure the following environment variables in your server configuration or env files if deploying to custom LiveKit servers:
+
+- `LIVEKIT_URL`: WebSockets signaling URL (defaults to `ws://localhost:7880`).
+- `LIVEKIT_API_KEY`: Access API key (defaults to `devkey`).
+- `LIVEKIT_SECRET`: Access API secret key (defaults to `secret`).
+
+### Decoupled Media & Data Planes Architecture
+```
+                     +───────────────────────+
+                     │   React Dashboard     │
+                     +───────────┬───────────+
+                                 │
+                 ┌───────────────┴───────────────┐
+                 ▼ (REST & WS JSON)              ▼ (WebRTC Media UDP)
+       +───────────────────+           +───────────────────+
+       │ Express API Node  │           │   LiveKit SFU     │
+       │ (Port 3000)       │           │   (Port 7880)     │
+       +───────────────────+           +───────────────────+
+```

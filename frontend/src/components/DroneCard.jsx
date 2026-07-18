@@ -1,5 +1,6 @@
 import { useState, useEffect, memo } from 'react';
 import { statusColor, batteryColor, timeAgo, statusLabel } from '../utils/format.js';
+import DroneVideoPlayer from './DroneVideoPlayer.jsx';
 import './DroneCard.css';
 
 const COMMANDS = [
@@ -117,6 +118,8 @@ const DroneCard = memo(function DroneCard({ drone, onRename, onCommand }) {
         </div>
         <div className="metric-value mono">{drone.missionProgress ?? 0}%</div>
       </div>
+
+      <DroneVideoPlayer drone={drone} />
 
       <div className="drone-card__commands">
         {COMMANDS.map((cmd) => (

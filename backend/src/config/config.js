@@ -1,3 +1,21 @@
+// Load environment variables from .env
+require('dotenv').config();
+
+// Centralized runtime validation of environment variables
+function validateEnv() {
+  const required = ['LIVEKIT_API_KEY', 'LIVEKIT_SECRET'];
+  const missing = required.filter((key) => !process.env[key]);
+
+  if (missing.length > 0) {
+    console.error(`\n[FATAL ERROR] Missing required environment variable(s):`);
+    missing.forEach((key) => console.error(`  - ${key}`));
+    console.error(`\nPlease configure these variables in your .env file or environment.\n`);
+    process.exit(1);
+  }
+}
+
+validateEnv();
+
 /**
  * Central configuration. Reads from environment variables with sane
  * defaults so the service runs with zero setup.
@@ -20,5 +38,11 @@ module.exports = {
 
   cors: {
     origin: process.env.CORS_ORIGIN || '*',
+  },
+
+  livekit: {
+    url: process.env.LIVEKIT_URL || 'ws://localhost:7880',
+    apiKey: process.env.LIVEKIT_API_KEY || 'devkey',
+    secret: process.env.LIVEKIT_SECRET || 'secret',
   },
 };
