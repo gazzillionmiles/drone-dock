@@ -6,6 +6,7 @@ export function useLiveKit(droneId) {
   const [serverUrl, setServerUrl] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [configured, setConfigured] = useState(true);
 
   useEffect(() => {
     if (!droneId) return;
@@ -22,9 +23,14 @@ export function useLiveKit(droneId) {
         }
         const body = await res.json();
         if (active) {
-          setToken(body.data.token);
-          setRoomName(body.data.roomName);
-          setServerUrl(body.data.serverUrl);
+          if (body.data && body.data.configured === false) {
+            setConfigured(false);
+          } else {
+            setConfigured(true);
+            setToken(body.data.token);
+            setRoomName(body.data.roomName);
+            setServerUrl(body.data.serverUrl);
+          }
         }
       } catch (err) {
         if (active) {
@@ -44,5 +50,5 @@ export function useLiveKit(droneId) {
     };
   }, [droneId]);
 
-  return { token, roomName, serverUrl, loading, error };
+  return { token, roomName, serverUrl, loading, error, configured };
 }

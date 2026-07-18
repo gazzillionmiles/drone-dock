@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const livekitTokenService = require('../livekit/tokenService');
+const config = require('../config/config');
 
 function createDroneRoutes(droneController) {
   const router = Router();
@@ -19,8 +20,26 @@ function createDroneRoutes(droneController) {
           message: 'droneId query parameter is required.',
         });
       }
+
+      const apiKey = config.livekit.apiKey;
+      const apiSecret = config.livekit.secret;
+
+      if (!apiKey || !apiSecret) {
+        return res.json({
+          data: {
+            configured: false,
+            message: 'LiveKit is not configured.'
+          }
+        });
+      }
+
       const data = await livekitTokenService.generateToken(droneId, participantName);
-      res.json({ data });
+      res.json({
+        data: {
+          ...data,
+          configured: true
+        }
+      });
     } catch (err) {
       next(err);
     }

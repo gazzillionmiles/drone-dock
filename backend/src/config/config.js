@@ -7,10 +7,7 @@ function validateEnv() {
   const missing = required.filter((key) => !process.env[key]);
 
   if (missing.length > 0) {
-    console.error(`\n[FATAL ERROR] Missing required environment variable(s):`);
-    missing.forEach((key) => console.error(`  - ${key}`));
-    console.error(`\nPlease configure these variables in your .env file or environment.\n`);
-    process.exit(1);
+    console.log(`\n[INFO] LiveKit API keys not fully configured. Video feed will show a placeholder.\n`);
   }
 }
 
@@ -42,7 +39,7 @@ module.exports = {
 
   livekit: {
     url: process.env.LIVEKIT_URL || 'ws://localhost:7880',
-    apiKey: process.env.LIVEKIT_API_KEY || 'devkey',
-    secret: process.env.LIVEKIT_SECRET || 'secret',
+    apiKey: process.env.LIVEKIT_API_KEY || null,
+    secret: process.env.LIVEKIT_SECRET || null,
   },
 };

@@ -6,7 +6,7 @@ import './DroneVideoPlayer.css';
 import { LiveKitRoom } from '@livekit/components-react';
 
 export default function DroneVideoPlayer({ drone }) {
-  const { token, serverUrl, loading, error } = useLiveKit(drone.id);
+  const { token, serverUrl, loading, error, configured } = useLiveKit(drone.id);
   const canvasRef = useRef(null);
   const [lkState, setLkState] = useState('Disconnected');
 
@@ -140,18 +140,20 @@ export default function DroneVideoPlayer({ drone }) {
   const handleError = () => setLkState('Disconnected');
 
   useEffect(() => {
-    if (token) {
+    if (configured === false) {
+      setLkState('Not Configured');
+    } else if (token) {
       setLkState('Connecting...');
     } else {
       setLkState('Disconnected');
     }
-  }, [token]);
+  }, [token, configured]);
 
   return (
     <div className="drone-video">
       <div className="drone-video__header">
         <span className="drone-video__title mono">VIDEO FEED</span>
-        <span className={`drone-video__badge mono drone-video__badge--${lkState.toLowerCase().replace('...', '')}`}>
+        <span className={`drone-video__badge mono drone-video__badge--${lkState.toLowerCase().replace('...', '').replace(' ', '-')}`}>
           {lkState}
         </span>
       </div>
@@ -159,6 +161,11 @@ export default function DroneVideoPlayer({ drone }) {
       <div className="drone-video__container">
         {loading && <div className="drone-video__overlay mono">Syncing WebRTC token...</div>}
         {error && <div className="drone-video__overlay drone-video__overlay--error mono">LiveKit Error: {error}</div>}
+        {configured === false && (
+          <div className="drone-video__overlay drone-video__overlay--warning mono">
+            VIDEO NOT CONFIGURED
+          </div>
+        )}
 
         <canvas ref={canvasRef} className="drone-video__canvas" />
 

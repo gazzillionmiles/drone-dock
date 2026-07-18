@@ -46,6 +46,11 @@
   color: var(--red);
 }
 
+.drone-video__badge--not-configured {
+  background: rgba(150, 150, 150, 0.15);
+  color: var(--text-muted);
+}
+
 .drone-video__container {
   position: relative;
   width: 100%;
@@ -75,6 +80,12 @@
 
 .drone-video__overlay--error {
   color: var(--red);
+  padding: 16px;
+  text-align: center;
+}
+
+.drone-video__overlay--warning {
+  color: var(--amber);
   padding: 16px;
   text-align: center;
 }
