@@ -37,6 +37,7 @@ class DroneService {
     const result = this.simulator.applyCommand(id, command);
     if (result === null) return { error: 'NOT_FOUND' };
     if (result === false) return { error: 'BATTERY_DEPLETED' };
+    if (result === 'INVALID_STATE') return { error: 'INVALID_STATE' };
     return { drone: result };
   }
 }

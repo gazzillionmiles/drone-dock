@@ -1,4 +1,4 @@
-import { useState, memo } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { statusColor, batteryColor, timeAgo, statusLabel } from '../utils/format.js';
 import './DroneCard.css';
 
@@ -12,12 +12,33 @@ const COMMANDS = [
 const DroneCard = memo(function DroneCard({ drone, onRename, onCommand }) {
   const [editing, setEditing] = useState(false);
   const [draftName, setDraftName] = useState(drone.name);
+  const [loading, setLoading] = useState(false);
+  const [tick, setTick] = useState(0);
 
-  const submitRename = () => {
+  // Force-update the local relative timestamps every 5 seconds so they don't get stale for non-active drones.
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTick((t) => t + 1);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const submitRename = async () => {
     setEditing(false);
     const trimmed = draftName.trim();
-    if (trimmed && trimmed !== drone.name) onRename(drone.id, trimmed);
-    else setDraftName(drone.name);
+    if (trimmed && trimmed !== drone.name) {
+      setLoading(true);
+      await onRename(drone.id, trimmed);
+      setLoading(false);
+    } else {
+      setDraftName(drone.name);
+    }
+  };
+
+  const handleCommand = async (cmdValue) => {
+    setLoading(true);
+    await onCommand(drone.id, cmdValue);
+    setLoading(false);
   };
 
   const isCompleted = drone.status === 'COMPLETED';
@@ -102,8 +123,8 @@ const DroneCard = memo(function DroneCard({ drone, onRename, onCommand }) {
           <button
             key={cmd.value}
             className="cmd-btn"
-            disabled={isCompleted}
-            onClick={() => onCommand(drone.id, cmd.value)}
+            disabled={isCompleted || loading}
+            onClick={() => handleCommand(cmd.value)}
           >
             {cmd.label}
           </button>

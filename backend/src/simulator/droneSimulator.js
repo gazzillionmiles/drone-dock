@@ -71,14 +71,38 @@ class DroneSimulator extends EventEmitter {
     const drone = this.drones.get(Number(id));
     if (!drone) return null;
 
-    if (command === 'TAKEOFF' && drone.battery <= 0) {
-      return false; // Depleted battery validation
+    if (command === 'TAKEOFF') {
+      if (drone.battery <= 0) {
+        return false; // Depleted battery validation
+      }
+      if (drone.status !== 'IDLE' && drone.status !== 'COMPLETED') {
+        return 'INVALID_STATE';
+      }
+    }
+
+    if (command === 'LAND') {
+      if (drone.status === 'IDLE' || drone.status === 'LANDING' || drone.status === 'COMPLETED') {
+        return 'INVALID_STATE';
+      }
+    }
+
+    if (command === 'RETURN_HOME') {
+      if (drone.status === 'IDLE' || drone.status === 'LANDING' || drone.status === 'RETURNING' || drone.status === 'COMPLETED') {
+        return 'INVALID_STATE';
+      }
+    }
+
+    if (command === 'PAUSE_MISSION') {
+      if (drone.status !== 'FLYING' && drone.status !== 'RETURNING') {
+        return 'INVALID_STATE';
+      }
     }
 
     switch (command) {
       case 'TAKEOFF':
         drone.status = 'TAKING_OFF';
         drone.userControlled = true;
+        drone.missionProgress = 0; // Reset mission progress on new takeoff
         break;
       case 'LAND':
         drone.status = 'LANDING';
@@ -123,7 +147,7 @@ class DroneSimulator extends EventEmitter {
         drone.status = 'FLYING';
       } else if (drone.status === 'LANDING' && drone.altitude <= 0) {
         drone.status = 'IDLE';
-        drone.userControlled = false; // completed landing, hand back to autonomous loop
+        // Keep drone.userControlled = true so it stays IDLE until the user commands another takeoff!
       }
     }
 
@@ -147,9 +171,12 @@ class DroneSimulator extends EventEmitter {
     const drain = drone.status === 'IDLE' ? rand(0, 0.1) : rand(0.1, 0.6);
     drone.battery = Number(clamp(drone.battery - drain, 0, 100).toFixed(1));
 
-    // GPS: slight random walk
-    drone.latitude = Number((drone.latitude + rand(-0.0006, 0.0006)).toFixed(5));
-    drone.longitude = Number((drone.longitude + rand(-0.0006, 0.0006)).toFixed(5));
+    // GPS: slight random walk (only if airborne)
+    const isAirborne = ['TAKING_OFF', 'FLYING', 'RETURNING', 'LANDING'].includes(drone.status);
+    if (isAirborne) {
+      drone.latitude = Number((drone.latitude + rand(-0.0006, 0.0006)).toFixed(5));
+      drone.longitude = Number((drone.longitude + rand(-0.0006, 0.0006)).toFixed(5));
+    }
 
     // Mission progress advances while actively flying a mission
     if (drone.status === 'FLYING' || drone.status === 'RETURNING') {
@@ -163,6 +190,7 @@ class DroneSimulator extends EventEmitter {
       drone.missionProgress = 100;
       drone.status = 'COMPLETED';
       drone.speed = 0;
+      drone.altitude = 0;
     }
 
     // Battery fully depleted forces a landing/idle state regardless of RNG

@@ -4,6 +4,7 @@ const ERROR_STATUS = {
   INVALID_COMMAND: 400,
   NOT_FOUND: 404,
   BATTERY_DEPLETED: 400,
+  INVALID_STATE: 400,
 };
 
 const ERROR_MESSAGE = {
@@ -12,6 +13,7 @@ const ERROR_MESSAGE = {
   INVALID_COMMAND: 'command must be one of TAKEOFF, LAND, RETURN_HOME, PAUSE_MISSION.',
   NOT_FOUND: 'Drone not found.',
   BATTERY_DEPLETED: 'Cannot takeoff: battery is fully depleted.',
+  INVALID_STATE: 'Command is not allowed in the current drone state.',
 };
 
 function sendError(res, code) {
