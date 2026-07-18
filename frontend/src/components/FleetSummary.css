@@ -1,0 +1,38 @@
+.fleet-summary {
+  display: flex;
+  gap: 28px;
+  padding: 14px 18px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.fleet-summary__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fleet-summary__value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.fleet-summary__value--warn {
+  color: var(--red);
+}
+
+.fleet-summary__label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+@media (max-width: 640px) {
+  .fleet-summary {
+    flex-wrap: wrap;
+    gap: 16px 24px;
+  }
+}

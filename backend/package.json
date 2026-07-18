@@ -1,0 +1,16 @@
+{
+  "name": "drone-dock-backend",
+  "version": "1.0.0",
+  "description": "Backend service for the Drone Dock real-time telemetry dashboard",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "ws": "^8.18.0"
+  }
+}

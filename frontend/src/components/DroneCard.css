@@ -1,0 +1,145 @@
+.drone-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  border-top: 2px solid var(--status-color);
+  transition: border-color 0.3s ease;
+}
+
+.drone-card__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.drone-card__id {
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.drone-card__name {
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.drone-card__name:hover {
+  background: var(--panel-raised);
+}
+
+.drone-card__name-input {
+  flex: 1;
+  background: var(--panel-raised);
+  border: 1px solid var(--cyan);
+  color: var(--text);
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 14px;
+  min-width: 0;
+}
+
+.status-pill {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  color: var(--status-color);
+  background: color-mix(in srgb, var(--status-color) 14%, transparent);
+  white-space: nowrap;
+  font-family: var(--font-mono);
+}
+
+.metric-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.metric-value--small {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.drone-card__metric {
+  display: grid;
+  grid-template-columns: 60px 1fr 52px;
+  align-items: center;
+  gap: 8px;
+}
+
+.battery-bar,
+.mission-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--panel-raised);
+  overflow: hidden;
+}
+
+.battery-bar__fill,
+.mission-bar__fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.6s ease;
+}
+
+.mission-bar__fill {
+  background: var(--cyan);
+}
+
+.drone-card__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.drone-card__commands {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.cmd-btn {
+  background: var(--panel-raised);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 11px;
+  padding: 7px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.cmd-btn:hover:not(:disabled) {
+  border-color: var(--cyan);
+  color: var(--text);
+}
+
+.cmd-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}

@@ -1,0 +1,101 @@
+.dashboard {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.dashboard__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.dashboard__eyebrow {
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 0.12em;
+  margin-bottom: 4px;
+}
+
+.dashboard__title {
+  font-size: 26px;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.dashboard__banner {
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: rgba(232, 163, 61, 0.1);
+  border: 1px solid rgba(232, 163, 61, 0.35);
+  color: var(--amber);
+  font-size: 13px;
+  font-family: var(--font-mono);
+}
+
+.dashboard__banner--error {
+  background: rgba(226, 89, 107, 0.1);
+  border-color: rgba(226, 89, 107, 0.35);
+  color: var(--red);
+}
+
+.subscription-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+}
+
+@media (min-width: 768px) {
+  .subscription-filter {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+}
+
+.subscription-filter__label {
+  font-size: 11px;
+  color: var(--text-faint);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.subscription-filter__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.filter-btn {
+  background: var(--panel-raised);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 11px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-btn:hover {
+  border-color: var(--cyan);
+  color: var(--text);
+}
+
+.filter-btn--active {
+  background: var(--cyan);
+  border-color: var(--cyan);
+  color: var(--bg);
+  font-weight: 600;
+}

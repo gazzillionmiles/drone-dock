@@ -1,0 +1,74 @@
+:root {
+  --bg: #0b0e14;
+  --panel: #12161f;
+  --panel-raised: #171c28;
+  --border: #232838;
+  --border-soft: #1a1f2c;
+  --text: #e6e9ef;
+  --text-muted: #7c879c;
+  --text-faint: #4b5468;
+
+  --cyan: #4dd4c7;
+  --amber: #e8a33d;
+  --red: #e2596b;
+  --green: #6fcf7b;
+  --idle: #5a6478;
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  --radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(77, 212, 199, 0.06), transparent 40%),
+    radial-gradient(circle at 85% 20%, rgba(232, 163, 61, 0.05), transparent 45%);
+  color: var(--text);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(77, 212, 199, 0.25);
+}
+
+button {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* Focus visibility for keyboard users */
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
